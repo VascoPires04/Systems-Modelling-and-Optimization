@@ -1,0 +1,82 @@
+Set parameter Username
+Set parameter LicenseID to value 2787150
+Academic license - for non-commercial use only - expires 2027-03-04
+Set parameter NodefileStart to value 0.5
+Gurobi Optimizer version 13.0.1 build v13.0.1rc0 (linux64 - "Ubuntu 24.04.4 LTS")
+
+CPU model: AMD Ryzen 7 5800H with Radeon Graphics, instruction set [SSE2|AVX|AVX2]
+Thread count: 8 physical cores, 16 logical processors, using up to 16 threads
+
+Non-default parameters:
+NodefileStart  0.5
+
+Optimize a model with 825 rows, 825 columns and 21873 nonzeros (Min)
+Model fingerprint: 0x7f2a2f88
+Model has 825 linear objective coefficients
+Variable types: 0 continuous, 825 integer (825 binary)
+Coefficient statistics:
+  Matrix range     [1e+00, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [1e+00, 1e+00]
+
+
+[checkpoint] incumbent saved | objective = 125.0 | bases = 125
+Found heuristic solution: objective 125.0000000
+Presolve removed 16 rows and 4 columns
+Presolve time: 0.02s
+Presolved: 809 rows, 821 columns, 21489 nonzeros
+Variable types: 0 continuous, 821 integer (821 binary)
+
+Root relaxation: objective 3.298577e+01, 3703 iterations, 0.36 seconds (0.73 work units)
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   32.98577    0  465  125.00000   32.98577  73.6%     -    0s
+
+[checkpoint] incumbent saved | objective = 82.0 | bases = 82
+H    0     0                      82.0000000   32.98577  59.8%     -    0s
+
+[checkpoint] incumbent saved | objective = 52.0 | bases = 52
+H    0     0                      52.0000000   32.98577  36.6%     -    0s
+
+[checkpoint] incumbent saved | objective = 37.0 | bases = 37
+H    0     0                      37.0000000   32.98577  10.8%     -    0s
+
+[checkpoint] incumbent saved | objective = 35.0 | bases = 35
+H    0     0                      35.0000000   32.98577  5.75%     -    0s
+     0     0   33.10152    0  476   35.00000   33.10152  5.42%     -    0s
+     0     0   33.10910    0  489   35.00000   33.10910  5.40%     -    1s
+     0     0   33.16172    0  485   35.00000   33.16172  5.25%     -    1s
+     0     0   33.17452    0  505   35.00000   33.17452  5.22%     -    1s
+     0     0   33.21043    0  495   35.00000   33.21043  5.11%     -    1s
+     0     0   33.22415    0  518   35.00000   33.22415  5.07%     -    2s
+     0     0   33.23004    0  519   35.00000   33.23004  5.06%     -    2s
+     0     0   33.23395    0  524   35.00000   33.23395  5.05%     -    2s
+     0     0   33.23497    0  519   35.00000   33.23497  5.04%     -    2s
+     0     0   33.23532    0  524   35.00000   33.23532  5.04%     -    2s
+     0     0   33.23554    0  524   35.00000   33.23554  5.04%     -    2s
+     0     0   33.23557    0  524   35.00000   33.23557  5.04%     -    2s
+     0     0   33.26031    0  533   35.00000   33.26031  4.97%     -    3s
+     0     0   33.26031    0  533   35.00000   33.26031  4.97%     -    3s
+     0     2   33.26031    0  533   35.00000   33.26031  4.97%     -    3s
+    23    32   33.70655    5  487   35.00000   33.45489  4.41%   885    5s
+   295    84   33.90750    9  369   35.00000   33.61558  3.96%   554   10s
+   590    51   33.96681   10  374   35.00000   33.75701  3.55%   511   15s
+
+Cutting planes:
+  MIR: 402
+
+Explored 697 nodes (362773 simplex iterations) in 16.44 seconds (44.33 work units)
+Thread count was 16 (of 16 available processors)
+
+Solution count 5: 35 37 52 ... 125
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.500000000000e+01, best bound 3.500000000000e+01, gap 0.0000%
+
+User-callback calls 2908, time in user-callback 0.03 sec
+status: 2
+objective: 35.0
+bases: 35
