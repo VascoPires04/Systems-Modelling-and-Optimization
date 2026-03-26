@@ -23,11 +23,11 @@ def risk_color(r):
         return "#9E9E9E"
     r = int(r)
     return {
-        5: "#8B0000",
-        4: "#FF0000",
-        3: "#FFA500",
-        2: "#FFD700",
-        1: "#008000",
+        1: "#579723",  # rgb(87, 151, 35)
+        2: "#EBFF2F",  # rgb(235, 255, 47)
+        3: "#EE9B00",  # rgb(238, 155, 0)
+        4: "#DC0F0F",  # rgb(220, 15, 15)
+        5: "#902003",  # rgb(144, 32, 3)
     }.get(r, "#9E9E9E")
 
 def cell_bounds(lat, lon, size_m=500):
@@ -36,11 +36,26 @@ def cell_bounds(lat, lon, size_m=500):
     dlon = half / (111320 * math.cos(math.radians(lat)))
     return [[lat - dlat, lon - dlon], [lat + dlat, lon + dlon]]
 
+def lon_offset_for_meters(lat, meters):
+    return meters / (111320 * math.cos(math.radians(lat)))
+
+def lat_offset_for_meters(meters):
+    return meters / 111320
+
 center_lat = df["lat"].mean()
 center_lon = df["lon"].mean()
 
+min_lat = df["lat"].min()
+max_lat = df["lat"].max()
+min_lon = df["lon"].min()
+max_lon = df["lon"].max()
+
+right_margin_m = 2500
+legend_lon = max_lon + lon_offset_for_meters(center_lat, right_margin_m)
+legend_lat = max_lat - lat_offset_for_meters(800)
+
 m = folium.Map(
-    location=[center_lat, center_lon],
+    location=[center_lat, center_lon - lon_offset_for_meters(center_lat, 1200)],
     zoom_start=11,
     tiles="OpenStreetMap",
     control_scale=True
@@ -111,24 +126,34 @@ bases_layer.add_to(m)
 
 legend_html = """
 <div style="
-position: fixed; 
-bottom: 40px; left: 40px; width: 180px; z-index:9999;
-background-color: white; border:2px solid grey; padding: 10px;
-font-size:14px;
+background-color: white;
+border: 2px solid grey;
+padding: 10px 12px;
+font-size: 14px;
+box-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+width: 165px;
 ">
-<b>Wildfire risk</b><br>
-<div><span style="display:inline-block;width:14px;height:14px;background:#8B0000;"></span> 5 - Very high</div>
-<div><span style="display:inline-block;width:14px;height:14px;background:#FF0000;"></span> 4 - High</div>
-<div><span style="display:inline-block;width:14px;height:14px;background:#FFA500;"></span> 3 - Medium</div>
-<div><span style="display:inline-block;width:14px;height:14px;background:#FFD700;"></span> 2 - Low</div>
-<div><span style="display:inline-block;width:14px;height:14px;background:#008000;"></span> 1 - Very low</div>
-<div><span style="display:inline-block;width:14px;height:14px;background:#9E9E9E;"></span> Missing</div>
-<hr style="margin:6px 0;">
-<div><span style="display:inline-block;width:14px;height:14px;border:2px solid black;border-radius:50%;"></span> Base</div>
-<div><span style="display:inline-block;width:14px;height:14px;background:rgba(0,0,0,0.08);border:1px solid black;border-radius:50%;"></span> Coverage radius</div>
+    <div style="font-weight: bold; margin-bottom: 8px;">Wildfire risk</div>
+    <div><span style="display:inline-block;width:14px;height:14px;background:#902003;"></span> 5 - Very high</div>
+    <div><span style="display:inline-block;width:14px;height:14px;background:#DC0F0F;"></span> 4 - High</div>
+    <div><span style="display:inline-block;width:14px;height:14px;background:#EE9B00;"></span> 3 - Medium</div>
+    <div><span style="display:inline-block;width:14px;height:14px;background:#EBFF2F;"></span> 2 - Low</div>
+    <div><span style="display:inline-block;width:14px;height:14px;background:#579723;"></span> 1 - Very low</div>
+    <div><span style="display:inline-block;width:14px;height:14px;background:#9E9E9E;"></span> Missing</div>
+    <hr style="margin:8px 0;">
+    <div><span style="display:inline-block;width:12px;height:12px;border:2px solid black;border-radius:50%;margin-right:6px;"></span> Base</div>
+    <div style="margin-top:4px;"><span style="display:inline-block;width:12px;height:12px;background:rgba(0,0,0,0.08);border:1px solid black;border-radius:50%;margin-right:6px;"></span> Coverage radius</div>
 </div>
 """
-m.get_root().html.add_child(folium.Element(legend_html))
+
+folium.Marker(
+    location=[legend_lat, legend_lon],
+    icon=folium.DivIcon(
+        icon_size=(180, 220),
+        icon_anchor=(0, 0),
+        html=legend_html
+    )
+).add_to(m)
 
 folium.LayerControl(collapsed=False).add_to(m)
 

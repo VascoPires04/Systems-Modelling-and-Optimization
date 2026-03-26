@@ -1,0 +1,17 @@
+{
+  "n_runs": 10,
+  "use_warm": false,
+  "objective_unique_values": [
+    35.0
+  ],
+  "bases_unique_values": [
+    35
+  ],
+  "same_objective_all_runs": true,
+  "same_number_of_bases_all_runs": true,
+  "same_exact_facility_set_all_runs": true,
+  "runtime_mean_seconds": 15.30594027042389,
+  "runtime_std_seconds": 0.6978794757038385,
+  "runtime_min_seconds": 14.490222215652466,
+  "runtime_max_seconds": 16.521816968917847
+}
