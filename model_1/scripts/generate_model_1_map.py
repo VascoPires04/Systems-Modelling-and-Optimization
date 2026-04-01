@@ -7,9 +7,9 @@ import folium
 R = 1500
 CELL_SIZE = 500
 
-root = Path(__file__).resolve().parent.parent
-data = root / "data"
-results = root / "results"
+repo_root = Path(__file__).resolve().parents[2]
+data = repo_root / "data"
+results = repo_root / "model_1" / "results"
 results.mkdir(exist_ok=True)
 
 df = pd.read_csv(data / "Dataset_clean.csv")

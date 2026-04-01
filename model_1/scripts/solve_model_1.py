@@ -1,4 +1,4 @@
-# scripts/solve_model_1.py
+# model_1/scripts/solve_model_1.py
 
 import sys
 import time
@@ -12,9 +12,9 @@ use_warm = False
 if len(sys.argv) > 1:
     use_warm = sys.argv[1].lower() == "true"
 
-root = Path(__file__).resolve().parent.parent
-data = root / "data"
-results = root / "results"
+repo_root = Path(__file__).resolve().parents[2]
+data = repo_root / "data"
+results = repo_root / "model_1" / "results"
 results.mkdir(exist_ok=True)
 
 df = pd.read_csv(data / "Dataset_clean.csv")

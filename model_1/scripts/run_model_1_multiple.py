@@ -1,4 +1,4 @@
-# scripts/run_model_1_multiple.py
+# model_1/scripts/run_model_1_multiple.py
 
 import sys
 import json
@@ -15,8 +15,8 @@ if len(sys.argv) > 1:
 if len(sys.argv) > 2:
     use_warm = sys.argv[2].lower() == "true"
 
-root = Path(__file__).resolve().parent.parent
-results = root / "results"
+repo_root = Path(__file__).resolve().parents[2]
+results = repo_root / "model_1" / "results"
 results.mkdir(exist_ok=True)
 
 all_runs = []
@@ -24,7 +24,8 @@ all_runs = []
 for k in range(n_runs):
     print(f"Run {k + 1}/{n_runs}")
 
-    cmd = ["python3", str(root / "scripts" / "solve_model_1.py"), str(use_warm).lower()]
+    solve_script = Path(__file__).resolve().parent / "solve_model_1.py"
+    cmd = ["python3", str(solve_script), str(use_warm).lower()]
     completed = subprocess.run(cmd, capture_output=True, text=True, check=True)
 
     lines = [line for line in completed.stdout.splitlines() if line.strip()]
