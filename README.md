@@ -141,7 +141,7 @@ Parameters are read from `model_2/config.json`:
 
 - `S` (autonomy in seconds)
 - `V` (speed in m/s)
-- `theta` (safety margin)
+- `theta` (safety margin)J
 - `W` (effective sensing swath width in meters)
 - `eta` (operational efficiency)
 - `c` (cost per base)
@@ -160,7 +160,7 @@ python3 model_2/scripts/solve_model_2.py
 
 #### Optional arguments:
 ```bash
-python3 model_2/scripts/solve_model_2.py <use_warm:true|false> [budget_override] [eta_override]
+python3 model_2/scripts/solve_model_2.py <use_warm:true|false> [budget_override]
 ```
 
 #### Output:
@@ -224,26 +224,7 @@ model_2/results/model_2_budget_vs_bases.png
 
 ---
 
-### 10. `model_2` — `run_eta_sensitivity.py`
-
-This script evaluates how `eta` affects `R_max`, covered risk, and selected bases.
-
-#### Run:
-```bash
-python3 model_2/scripts/run_eta_sensitivity.py
-```
-
-#### Output:
-```text
-model_2/results/model_2_eta_sensitivity.csv
-model_2/results/model_2_eta_sensitivity_summary.json
-model_2/results/model_2_eta_vs_risk_coverage.png
-model_2/results/model_2_eta_vs_rmax.png
-```
-
----
-
-### 11. `model_2` — `find_high_risk_coverage_budget.py`
+### 10. `model_2` — `find_high_risk_coverage_budget.py`
 
 This script scans budgets and tracks progress in covering points with very high risk (`risk = 5`).
 
@@ -298,7 +279,6 @@ Optional (sensitivity analyses):
 
 ```bash
 python3 model_2/scripts/run_budget_sensitivity.py
-python3 model_2/scripts/run_eta_sensitivity.py
 python3 model_2/scripts/find_high_risk_coverage_budget.py
 ```
 
