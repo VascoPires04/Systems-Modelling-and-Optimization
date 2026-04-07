@@ -1,5 +1,3 @@
-# model_1/scripts/run_model_1_multiple.py
-
 import sys
 import json
 import subprocess

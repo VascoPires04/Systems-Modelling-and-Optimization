@@ -1,5 +1,3 @@
-# model_1/scripts/solve_model_1.py
-
 import sys
 import time
 import json
@@ -59,7 +57,7 @@ def save_incumbent(model, where):
             out["selected"] = 1
             out.to_csv(results / "model_1_selected_bases.csv", index=False)
 
-            print(f"\n[checkpoint] incumbent saved | objective = {obj} | bases = {len(chosen)}")
+            print(f"Objective = {obj} | bases = {len(chosen)}")
 
 start = time.time()
 

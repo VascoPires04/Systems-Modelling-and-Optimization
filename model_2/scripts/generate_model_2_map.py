@@ -6,7 +6,6 @@ import folium
 
 import json
 
-# set later
 CELL_SIZE = 500
 
 repo_root = Path(__file__).resolve().parents[2]
@@ -25,9 +24,6 @@ eta = config["eta"]
 data = repo_root / "data"
 results = model_2_dir / "results"
 results.mkdir(exist_ok=True)
-
-if None in (S, V, theta, W, eta):
-    raise ValueError("Set S, V, theta, W, and eta before generating the map.")
 
 area = S * V * (1 - theta) * W * eta
 R_max = math.sqrt(area / math.pi)

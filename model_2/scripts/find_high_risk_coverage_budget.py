@@ -1,5 +1,3 @@
-# model_2/scripts/check_very_high_risk_coverage_progress.py
-
 import json
 import subprocess
 from pathlib import Path

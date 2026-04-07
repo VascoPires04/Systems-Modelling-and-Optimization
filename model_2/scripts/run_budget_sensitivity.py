@@ -1,5 +1,3 @@
-# model_2/scripts/run_budget_sensitivity.py
-
 import json
 import subprocess
 from pathlib import Path
