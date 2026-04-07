@@ -4,22 +4,33 @@ from pathlib import Path
 import pandas as pd
 import folium
 
-# set later
-S = 90*60
-V = 17
-theta = 0.2
+import json
 
+# set later
 CELL_SIZE = 500
 
 repo_root = Path(__file__).resolve().parents[2]
+model_2_dir = repo_root / "model_2"
+config_path = model_2_dir / "config.json"
+
+with open(config_path, "r") as f:
+    config = json.load(f)
+
+S = config["S"]
+V = config["V"]
+theta = config["theta"]
+W = config["W"]
+eta = config["eta"]
+
 data = repo_root / "data"
-results = repo_root / "model_2" / "results"
+results = model_2_dir / "results"
 results.mkdir(exist_ok=True)
 
-if None in (S, V, theta):
-    raise ValueError("Set S, V and theta before generating the map.")
+if None in (S, V, theta, W, eta):
+    raise ValueError("Set S, V, theta, W, and eta before generating the map.")
 
-R_max = S * V * (1 - theta) / 2
+area = S * V * (1 - theta) * W * eta
+R_max = math.sqrt(area / math.pi)
 
 df = pd.read_csv(data / "Dataset_clean.csv")
 bases = pd.read_csv(results / "model_2_selected_bases.csv")

@@ -2,6 +2,7 @@
 
 import sys
 import time
+import math
 import json
 import pandas as pd
 import gurobipy as gp
@@ -9,25 +10,43 @@ from gurobipy import GRB
 from pathlib import Path
 
 use_warm = False
+budget_override = None
+eta_override = None
+
 if len(sys.argv) > 1:
     use_warm = sys.argv[1].lower() == "true"
 
-# set later
-S = 90*60 # autonomy
-V = 17 # speed
-theta = 0.2 # safety margin (battry consumption buffer) betwen 0 and 1, where 0 means no buffer and 1 means full buffer (no operation)
-c = 25000 # uniform cost of opening a base
-B = 2500000 # budget
+if len(sys.argv) > 2:
+    budget_override = float(sys.argv[2])
 
+if len(sys.argv) > 3:
+    eta_override = float(sys.argv[3])
+
+# set later
 repo_root = Path(__file__).resolve().parents[2]
+model_2_dir = repo_root / "model_2"
+config_path = model_2_dir / "config.json"
+
+with open(config_path, "r") as f:
+    config = json.load(f)
+
+S = config["S"] # autonomy in seconds
+V = config["V"] # speed in m/s
+theta = config["theta"] # safety margin (battry consumption buffer) betwen 0 and 1, where 0 means no buffer and 1 means full buffer (no operation)
+W = config["W"] # effective sensor's field of view width on the ground (in m)
+eta = eta_override if eta_override is not None else config["eta"] # flight execution efficiency, reflecting the reality of non-linear flight paths
+c = config["c"] # uniform cost of opening a base
+B = budget_override if budget_override is not None else config["B"] # budget
+
 data = repo_root / "data"
-results = repo_root / "model_2" / "results"
+results = model_2_dir / "results"
 results.mkdir(exist_ok=True)
 
-if None in (S, V, theta, c, B):
-    raise ValueError("Set S, V, theta, c and B before running the model.")
+if None in (S, V, theta, W, eta, c, B):
+    raise ValueError("Set S, V, theta, W, eta, c and B before running the model.")
 
-R_max = S * V * (1 - theta) / 2
+area = S * V * (1 - theta) * W * eta
+R_max = math.sqrt(area / math.pi)
 
 
 df = pd.read_csv(data / "Dataset_clean.csv")
@@ -94,10 +113,18 @@ elapsed = time.time() - start
 
 chosen = []
 covered_ids = []
+total_risk = sum(float(risk_map.get(i, 0.0)) for i in I)
+covered_risk = 0.0
+risk_coverage_ratio = None
+risk_coverage_percent = None
 
 if m.SolCount > 0:
     chosen = sorted([j for j in J if y[j].X > 0.5])
     covered_ids = sorted([i for i in I if z[i].X > 0.5])
+
+    covered_risk = sum(float(risk_map.get(i, 0.0)) for i in covered_ids)
+    risk_coverage_ratio = covered_risk / total_risk if total_risk > 0 else None
+    risk_coverage_percent = 100 * risk_coverage_ratio if risk_coverage_ratio is not None else None
 
     out = df[df["real_id"].isin(chosen)].copy()
     out["selected"] = 1
@@ -113,6 +140,10 @@ result = {
     "objective": float(m.ObjVal) if m.SolCount > 0 else None,
     "bases": len(chosen),
     "covered_points": len(covered_ids),
+    "total_risk": total_risk,
+    "covered_risk": covered_risk,
+    "risk_coverage_ratio": risk_coverage_ratio,
+    "risk_coverage_percent": risk_coverage_percent,
     "runtime_seconds": elapsed,
     "solution_ids": chosen,
     "covered_ids": covered_ids,
@@ -120,6 +151,8 @@ result = {
     "Autonomy": S,
     "Speed": V,
     "theta": theta,
+    "W": W,
+    "eta": eta,
     "cost_per_base": c,
     "Budget": B
 }

@@ -1,0 +1,21 @@
+{
+  "n_runs": 10,
+  "use_warm": false,
+  "objective_unique_values": [
+    1208.0
+  ],
+  "bases_unique_values": [
+    10
+  ],
+  "covered_points_unique_values": [
+    250
+  ],
+  "same_objective_all_runs": true,
+  "same_number_of_bases_all_runs": true,
+  "same_exact_facility_set_all_runs": true,
+  "same_exact_covered_set_all_runs": true,
+  "runtime_mean_seconds": 0.11818802356719971,
+  "runtime_std_seconds": 0.012471237553782013,
+  "runtime_min_seconds": 0.10944962501525879,
+  "runtime_max_seconds": 0.15122556686401367
+}
