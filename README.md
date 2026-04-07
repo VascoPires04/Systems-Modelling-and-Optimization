@@ -16,6 +16,7 @@ Project/
 │   ├── scripts/
 │   └── results/
 ├── model_2/
+│   ├── config.json
 │   ├── scripts/
 │   └── results/
 └── README.md
@@ -132,6 +133,132 @@ model_1/results/model_1_multiple_runs_summary.json
 
 ---
 
+### 6. `model_2` — `solve_model_2.py`
+
+This script solves the budget-constrained maximum coverage model, maximizing covered wildfire risk.
+
+Parameters are read from `model_2/config.json`:
+
+- `S` (autonomy in seconds)
+- `V` (speed in m/s)
+- `theta` (safety margin)
+- `W` (effective sensing swath width in meters)
+- `eta` (operational efficiency)
+- `c` (cost per base)
+- `B` (budget)
+
+Coverage radius is computed as:
+
+$$
+A = S \cdot V \cdot (1-\theta) \cdot W \cdot \eta, \qquad R_{\max} = \sqrt{\frac{A}{\pi}}
+$$
+
+#### Run:
+```bash
+python3 model_2/scripts/solve_model_2.py
+```
+
+#### Optional arguments:
+```bash
+python3 model_2/scripts/solve_model_2.py <use_warm:true|false> [budget_override] [eta_override]
+```
+
+#### Output:
+```text
+model_2/results/model_2_selected_bases.csv
+model_2/results/model_2_covered_points.csv
+model_2/results/model_2_last_run.json
+```
+
+---
+
+### 7. `model_2` — `generate_model_2_map.py`
+
+This script generates an interactive map with wildfire risk grid, selected bases, and the model_2 coverage radius.
+
+#### Run:
+```bash
+python3 model_2/scripts/generate_model_2_map.py
+```
+
+#### Output:
+```text
+model_2/results/model_2_map.html
+```
+
+---
+
+### 8. `model_2` — `run_model_2_multiple.py`
+
+This script runs `solve_model_2.py` multiple times and summarizes runtime and solution stability.
+
+#### Run:
+```bash
+python3 model_2/scripts/run_model_2_multiple.py 10 false
+```
+
+#### Output:
+```text
+model_2/results/model_2_multiple_runs.csv
+model_2/results/model_2_multiple_runs_summary.json
+```
+
+---
+
+### 9. `model_2` — `run_budget_sensitivity.py`
+
+This script evaluates solution quality and selected bases across predefined budget values.
+
+#### Run:
+```bash
+python3 model_2/scripts/run_budget_sensitivity.py
+```
+
+#### Output:
+```text
+model_2/results/model_2_budget_sensitivity.csv
+model_2/results/model_2_budget_sensitivity_summary.json
+model_2/results/model_2_budget_vs_risk_coverage.png
+model_2/results/model_2_budget_vs_bases.png
+```
+
+---
+
+### 10. `model_2` — `run_eta_sensitivity.py`
+
+This script evaluates how `eta` affects `R_max`, covered risk, and selected bases.
+
+#### Run:
+```bash
+python3 model_2/scripts/run_eta_sensitivity.py
+```
+
+#### Output:
+```text
+model_2/results/model_2_eta_sensitivity.csv
+model_2/results/model_2_eta_sensitivity_summary.json
+model_2/results/model_2_eta_vs_risk_coverage.png
+model_2/results/model_2_eta_vs_rmax.png
+```
+
+---
+
+### 11. `model_2` — `find_high_risk_coverage_budget.py`
+
+This script scans budgets and tracks progress in covering points with very high risk (`risk = 5`).
+
+#### Run:
+```bash
+python3 model_2/scripts/find_high_risk_coverage_budget.py
+```
+
+#### Output:
+```text
+model_2/results/model_2_very_high_risk_coverage_progress.csv
+```
+
+---
+
 ## Suggested execution order
 
 ### Common preprocessing (shared by all models)
@@ -156,13 +283,30 @@ python3 model_1/scripts/run_model_1_multiple.py 10 false
 
 ### Model 2 pipeline
 
-`model_2/` is scaffolded but not implemented yet. When added, it should read inputs from `data/` and write outputs to `model_2/results/`.
+```bash
+python3 model_2/scripts/solve_model_2.py
+python3 model_2/scripts/generate_model_2_map.py
+```
+
+Optional (multiple runs):
+
+```bash
+python3 model_2/scripts/run_model_2_multiple.py 10 false
+```
+
+Optional (sensitivity analyses):
+
+```bash
+python3 model_2/scripts/run_budget_sensitivity.py
+python3 model_2/scripts/run_eta_sensitivity.py
+python3 model_2/scripts/find_high_risk_coverage_budget.py
+```
 
 ---
 
 ## Notes
 
 - The optimization model assumes one drone per base.
-- The coverage logic is based on a predefined radius `R`.
-- The baseline model focuses only on the strategic full-coverage problem.
-- Gurobi must be installed and licensed for `model_1/scripts/solve_model_1.py` to run.
+- `model_1` uses a baseline full-coverage formulation, while `model_2` uses a budget-constrained maximum coverage formulation.
+- For `model_2`, all tunable parameters are centralized in `model_2/config.json`.
+- Gurobi must be installed and licensed for both `model_1/scripts/solve_model_1.py` and `model_2/scripts/solve_model_2.py`.
