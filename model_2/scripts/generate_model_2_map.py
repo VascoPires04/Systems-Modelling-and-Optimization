@@ -66,12 +66,12 @@ max_lat = df["lat"].max()
 min_lon = df["lon"].min()
 max_lon = df["lon"].max()
 
-right_margin_m = 2500
-legend_lon = max_lon + lon_offset_for_meters(center_lat, right_margin_m)
+right_margin_m = 22000
+legend_lon = max_lon - lon_offset_for_meters(center_lat, right_margin_m)
 legend_lat = max_lat - lat_offset_for_meters(800)
 
 m = folium.Map(
-    location=[center_lat, center_lon - lon_offset_for_meters(center_lat, 1200)],
+    location=[center_lat, center_lon + lon_offset_for_meters(center_lat, 1200)],
     zoom_start=11,
     tiles="OpenStreetMap",
     control_scale=True
@@ -157,7 +157,7 @@ width: 165px;
     <div><span style="display:inline-block;width:14px;height:14px;background:#579723;"></span> 1 - Very low</div>
     <div><span style="display:inline-block;width:14px;height:14px;background:#9E9E9E;"></span> Missing</div>
     <hr style="margin:8px 0;">
-    <div><span style="display:inline-block;width:12px;height:12px;border:2px solid black;border-radius:50%;margin-right:6px;"></span> Base</div>
+    <div><span style="display:inline-block;width:8px;height:8px;background:black;border-radius:50%;margin-right:6px;"></span> Base</div>
     <div style="margin-top:4px;"><span style="display:inline-block;width:12px;height:12px;background:rgba(0,0,0,0.08);border:1px solid black;border-radius:50%;margin-right:6px;"></span> Coverage radius</div>
 </div>
 """

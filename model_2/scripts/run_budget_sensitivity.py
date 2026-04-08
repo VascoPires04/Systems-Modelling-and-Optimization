@@ -9,7 +9,8 @@ import matplotlib.pyplot as plt
 USE_WARM = False
 
 BUDGETS = [
-    700000,
+    500000,
+    750000,
     850000,
     1000000,
     1250000,

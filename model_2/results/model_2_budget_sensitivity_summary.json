@@ -1,6 +1,7 @@
 {
   "budgets": [
-    700000,
+    500000,
+    750000,
     850000,
     1000000,
     1250000,
@@ -14,7 +15,7 @@
   ],
   "cost_per_base": 80000.0,
   "max_risk_coverage_percent": 100.0,
-  "min_risk_coverage_percent": 30.073800738007378,
+  "min_risk_coverage_percent": 22.81672816728167,
   "max_bases": 37,
-  "min_bases": 8
+  "min_bases": 6
 }
